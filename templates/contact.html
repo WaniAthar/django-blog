@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}The Coding tech - Contact{% endblock title %}
+
+
+
+{% block contact_active %}active{% endblock contact_active %}
+{% block body %}
+
+
+<link rel="stylesheet" href="style.css">
+
+<div class="container my-3">
+<h1>Contact me</h1>
+</div>
+<div class="container mx-25 my-20">
+<form method="post" action="/contact">
+{% csrf_token %}
+<div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control" placeholder="Eg. Athar Wani" name="name" id="text" aria-describedby="name">
+    </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" placeholder="Eg. athar@email.com" name="email" id="emailinput" aria-describedby="emailHelp">
+    </div> 
+    <div class="mb-3">
+    <label for="subject" class="form-label">Subject</label>
+    <input type="text" class="form-control" placeholder="Your subject" name="subject" id="text" aria-describedby="subject">
+    </div>
+  <div class="mb-3">
+  <label for="message" class="form-label">Your message</label>
+  <textarea class="form-control" placeholder="Leave your message here" name="message" id="floatingTextarea" cols="30" rows="5"></textarea>
+ 
+</div>
+  <button type="submit" class="btn btn-outline-success">Submit</button>
+</form>
+</div>
+{% endblock body %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}{{post.title}}{% endblock title %}
+{% load humanize %}
+{% load extras %}  <!-- here i am loading the py file in which i have created a custom filter to return keys of the dictionary. In the same way i have to import extras in views.py-->
+
+{% block body %}
+<div class="container">
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <h1 id="post-title-main">{{post.title}}</h1>
+  </div>
+  <div class="mb-1 text-muted">{{post.Publishing_Time}}</div>
+  <div class="mb-1 text-muted" style="font-family:Roboto Mono" > <b> Author: <a class="text-success text-decoration-none"
+        href="/about">{{post.author}}</b></a> </div>
+  <hr>
+
+  <p>
+    {{post.content|safe}}
+  </p>
+
+</div>
+
+
+</div>
+
+<div class="container">
+  <hr>
+  <h2 style="font-family:verdana">Comments({{comments.count}})</h2>
+  {% if user.is_authenticated %}
+
+  <form action="/PostComment" method="post">
+    {% csrf_token %}
+    <div class="form-floating">
+      <textarea class="form-control" placeholder="Leave a comment here" id="comment" name="comment"
+        style="height: 100px"></textarea>
+      <label for="floatingTextarea2">Comments</label>
+      <input type="hidden" name="postSno" , value="{{post.sno}}">
+      <input type="hidden" name="parentSno" , value="">
+
+    </div>
+    <button type="submit" class="btn btn-success my-2">Add comment</button>
+  </form>
+  {% else %}
+  <p>
+    <i>
+      You must login to comment or reply to this post
+    </i>
+  </p>
+  {% endif %}
+
+
+  {% for comment in comments %}
+  <div class="shadow-lg p-3 mb-5 bg-body rounded">
+    <div class="row my-3">
+      <div class="col-md-1">
+
+      </div>
+
+      <div class="col-md-11"><b>{{comment.user.username}}</b> <span class"text-muted" style="font-family:Roboto Mono">
+      <b class="mx-2 badge bg-success">{{comment.timestamp|naturaltime}}</b></span>
+        <div class="my-2" style="font-family:verdana">{{comment.comment}}</div>
+        <a class="text-success text-decoration-none" data-bs-toggle="collapse" href="#addreply{{comment.sno}}"
+          role="button" aria-expanded="false" aria-controls="addreply{{comment.sno}}">
+          <div class="replies my-2">
+          {% comment %} <span style="font-family:verdana" class="text-dark"><b> <i> Replies({{replydict.get_val.comment.count}}) </i></b></span> {% endcomment %}
+        {% for reply in replydict|get_val:comment.sno %}
+        <div class="shadow-lg p-3 mb-5 bg-body rounded text-dark my-2">
+        <small style="font-family:verdana">
+        <b>{{comment.user.username}}</b>
+        <span class"text-muted" style="font-family:Roboto Mono">
+      <b class="mx-2 badge bg-success">{{reply.timestamp|naturaltime}}</b></span><br>
+      <i>
+        {{reply.comment}}
+      </i>
+        </small>
+        </div>
+        {% endfor %}
+        </div>
+          {% if user.is_authenticated %}
+          <strong>
+            Reply
+          </strong>
+        </a>
+      </div>
+      <div class="collapse my-2" id="addreply{{comment.sno}}">
+
+        <form action="/PostComment" method="post">
+          {% csrf_token %}
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="comment" name="comment"
+              style="height: 100px"></textarea>
+            <label for="floatingTextarea2">Reply</label>
+            <input type="hidden" name="postSno" , value="{{post.sno}}">
+            <input type="hidden" name="parentSno" , value="{{comment.sno}}">
+          </div>
+          <button type="submit" class="btn btn-success my-2">Add reply</button>
+        </form>
+
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+  {% endfor %}
+
+
+</div>
+{% endblock body %}

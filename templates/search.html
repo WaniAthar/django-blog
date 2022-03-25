@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Search Results{% endblock title %}
+{% block body %}
+<div class="container">
+<h3>Search Results:</h3>
+{% if posts|length < 1 %}
+<br>
+<br>
+
+
+<p>
+It looks like there aren't many great matches for your search <b>"{{query}}"</b>
+</p>
+<p>Suggestions:</p>
+<ul>
+<li>
+<p> Try using some different keyword</p>
+</li>
+<li><p> Try reducing the keywords strength</p></li>
+<li><p>Try using more human understandable keywords</p></li>
+</ul>
+<p><b>or</b></p>
+<ul><li>
+If the problem perists, try contacting me <a href="/contact">here</a> 
+</li></ul>
+<br>
+<br>
+<br>
+<br>
+<br><br><br><br><br><br><br><br>
+
+{% endif %}
+{% for post in posts %}
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+     
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success">By {{post.author}}</strong>
+          <h3 class="mb-0">{{post.title}}</h3>
+          <div class="mb-1 text-muted">{{post.Publishing_Time}}</div>
+
+          <p class="card-text mb-auto">{{post.content|truncatechars:150}}</p>
+          <div class="my-3">
+          <a href="posts/{{post.slug}}" class="btn btn-outline-success">Continue reading...</a>
+        </div>
+        </div>
+        </div>
+        
+        
+        
+        {% endfor %}
+        </div>
+        </div>
+{% endblock body %}
